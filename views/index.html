@@ -15,6 +15,7 @@
       canvas {
         border: 1px solid #ccc;
       }
+      
     </style>
 
     <!-- Bootstrap core CSS -->
@@ -71,7 +72,7 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">항공기 탄소 배출량</h1>
+        <h1 class="h2">Airplane Carbon Emissions</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
       </div>
@@ -79,16 +80,19 @@
       <!-- chart -->
       <canvas id = "myChart"></canvas>
       <script>
-        const ctx = document.getElementById('myChart');
         const xname = ['1월', '2월', '3월', '4월','5월','6월','7월','8월'];
-        const Data = JSON.parse('{{ data | safe }}'); // 전역 변수로 데이터 가져오기
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const jsonString = '{{ data | safe }}'; // Assuming Nunjucks supports this syntax
+        // Parse the JSON string
+        const serverData = JSON.parse(jsonString);
+
             new Chart(ctx, {
               type: 'line',
               data: {
                 labels: xname,
                 datasets: [{
                   label: 'Your Dataset Label',
-                  data: Data.map(item => item.mile),
+                  data: serverData.map(item => item.mile),
                   borderColor: 'rgba(75, 192, 192, 1)',
                   borderWidth: 1,
                   fill: false
