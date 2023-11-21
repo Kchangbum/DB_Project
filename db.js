@@ -1,8 +1,10 @@
-import express from 'express';
+import express, { json } from 'express';
 import mongoose from 'mongoose';
 import nunjucks from 'nunjucks';
 
+
 const app = express();
+
 app.set('view engine', 'html'); //main.html -> main.(html)
 
 //nunjucks setting
@@ -12,6 +14,8 @@ nunjucks.configure('views', {
   watch : true, //html파일이 수정될 경우, 다시 반영 후 렌더링
   express : app //express자체가 어떤 객체를 나타내는지 앞서 선언한 app을 입력
 })
+
+
 
 //mongodb connect
 mongoose
@@ -24,14 +28,14 @@ const { Schema } = mongoose;
 const distanceSchema = new Schema({
   mile: Number
 })
-const distance = mongoose.model('distance', distanceSchema, 'distance');
+const distance = mongoose.model('distance', distanceSchema);
 
-const emission_factorSchema = new Schema({
-  co2 : Number,
-  km : Number,
-  passenger : Number
-})
-const emission_factor = mongoose.model('emission_factor', emission_factorSchema, 'emissions_factor');
+// const emission_factorSchema = new Schema({
+//   co2 : Number,
+//   km : Number,
+//   passenger : Number
+// })
+//const emission_factor = mongoose.model('emission_factor', emission_factorSchema);
 
 app.get('/', async (req, res) => {
 
