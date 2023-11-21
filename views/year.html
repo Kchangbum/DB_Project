@@ -74,10 +74,6 @@
               <span data-feather="home"></span>
               Dashboard
             </a>
-            <a class="nav-link active" aria-current="page" href="/year">
-              <span data-feather="home"></span>
-              Gas_emission_by_year
-            </a>
           </li>
         </ul>
       </div>
@@ -101,9 +97,9 @@
             new Chart(ctx, {
               type: 'line',
               data: {
-                labels: serverData.map(item => item.Model),
+                labels: serverData.map(item => item.year),
                 datasets: [{
-                  label: 'Aircraft carbon emissions',
+                  label: 'Greenhouse_Gas_Emissions_by_Year',
                   data: serverData.map(item => item.tonCO2eq),
                   borderColor: 'rgba(75, 192, 192, 1)',
                   borderWidth: 1,
@@ -125,7 +121,7 @@
         <table class="table table-striped table-sm">
           <thead>
             <tr>
-              <th scope="col">Model</th>
+              <th scope="col">YEAR</th>
               <th scope="col">tonCO2eq</th>
             </tr>
           </thead>
@@ -133,7 +129,7 @@
           <tbody>
             {%for chartlist in list%}
             <tr>
-              <td>{{chartlist.Model}}</td>
+              <td>{{chartlist.year}}</td>
               <td>{{chartlist.tonCO2eq}}</td>
             </tr>
             {%endfor%}
