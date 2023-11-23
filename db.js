@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 //nunjucks setting
 //템플릿 엔진을 사용할 때 어떤 위치에서 파일을 찾을건지 경로 입력
 nunjucks.configure('views', {
-
   watch : true, //html파일이 수정될 경우, 다시 반영 후 렌더링
   express : app //express자체가 어떤 객체를 나타내는지 앞서 선언한 app을 입력
 })
@@ -55,12 +54,23 @@ app.get('/', async (req, res) => {
 
   //print chart
   try {
-    let chartValue = await emission_factor.find({});
+    //find data
+    let chartValue = await emission_factor.find({}); 
+    //find the average
+    let chartAvg = await emission_factor.aggregate([ { $group : { _id : null, averageValue: { $avg : '$tonCO2eq' }}} ]);
+    // chart sort
+    let chartSort = await emission_factor.find({}).sort({'tonCO2eq':1});
+    // reverse sort
+    let chartReverseSort = await emission_factor.find({}).sort({'tonCO2eq':-1});
+
     console.log(chartValue); // 결과를 확인하기 위해 로그로 출력
+    console.log(chartAvg);
+    console.log(chartSort);
+    console.log(chartReverseSort);
     // JSON 데이터를 문자열로 변환하여 Nunjucks에 전달
-    const jsonString = JSON.stringify(chartValue);
+    const data = JSON.stringify(chartValue);
     
-    res.render('index', {list : chartValue,  data : jsonString });
+    res.render('index',{list: chartValue , data , chartAvg});
   } catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');

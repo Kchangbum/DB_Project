@@ -104,12 +104,21 @@
                 labels: serverData.map(item => item.Model),
                 datasets: [{
                   label: 'Aircraft carbon emissions',
-                  data: serverData.map(item => item.tonCO2eq),
+                  data: ,
                   borderColor: 'rgba(75, 192, 192, 1)',
                   borderWidth: 1,
                   fill: false
-                }]
+                },
+                {
+                  label: 'Aircraft carbon emissions',
+                  data: [1000000,1000000,1000000,1000000,1000000,1000000],
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1,
+                  fill: false
+                }
+                ]
               },
+
               options: {
                 scales: {
                   y: {
