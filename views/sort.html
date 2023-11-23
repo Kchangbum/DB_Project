@@ -1,6 +1,4 @@
 
-</body>
-</html>
 <!doctype html>
 <html lang="en">
   <head>
@@ -59,9 +57,7 @@
     </button>
 
     <div class = "mx-auto col-7" >
-      <form action="/search", method="get">
         <input class="form-control form-control-dark w-100" type="text" name ="searchName" placeholder="Search" aria-label="Search">
-      </form>
     </div>
 
   </header>
@@ -76,6 +72,10 @@
               <span data-feather="home"></span>
               Dashboard
             </a>
+            <a class="nav-link active" aria-current="page" href="/year">
+              <span data-feather="home"></span>
+              Gas_emission_by_year
+            </a>
           </li>
         </ul>
       </div>
@@ -88,26 +88,38 @@
         </div>
       </div>
       
+      <a class="btn btn-primary" href="/sort" role="button">Chart Sort</a>
+      <a class="btn btn-primary" href="/reverseSort" role="button">Chart Reverse Sort</a>
+      
       <!-- chart -->
       <canvas id = "myChart"></canvas>
       <script>
         const ctx = document.getElementById('myChart').getContext('2d');
-        const jsonString = '{{ data | safe }}'; // Assuming Nunjucks supports this syntax
         // Parse the JSON string
-        const serverData = JSON.parse(jsonString);
+        const chartSort = JSON.parse('{{ chartSortValue | safe }}');
+        const chartAvg = JSON.parse('{{ chartAvg | safe }}');
 
             new Chart(ctx, {
               type: 'line',
               data: {
-                labels: serverData.map(item => item.year),
+                labels: chartSort.map(item => item.Model),
                 datasets: [{
-                  label: 'Greenhouse_Gas_Emissions_by_Year',
-                  data: serverData.map(item => item.tonCO2eq),
-                  borderColor: 'rgba(75, 192, 192, 1)',
+                  label: 'Aircraft carbon emissions(SORT)',
+                  data: chartSort.map(item=>item.tonCO2eq),
+                  borderColor: 'rgba(75, 260, 0, 1)',
                   borderWidth: 1,
                   fill: false
-                }]
+                },
+                {
+                  label: 'Aircraft carbon emissions(AVG)',
+                  data: Array(chartSort.length).fill(chartAvg[0].averageValue),
+                  borderColor: 'rgba(0, 0, 192, 1)',
+                  borderWidth: 1,
+                  fill: false
+                }
+                ]
               },
+
               options: {
                 scales: {
                   y: {
@@ -123,16 +135,16 @@
         <table class="table table-striped table-sm">
           <thead>
             <tr>
-              <th scope="col">YEAR</th>
+              <th scope="col">Model</th>
               <th scope="col">tonCO2eq</th>
             </tr>
           </thead>
           
           <tbody>
-            {%for chartlist in list%}
+            {%for chartSort in chartSort %}
             <tr>
-              <td>{{chartlist.year}}</td>
-              <td>{{chartlist.tonCO2eq}}</td>
+              <td>{{chartSort.Model}}</td>
+              <td>{{chartSort.tonCO2eq}}</td>
             </tr>
             {%endfor%}
           </tbody>
