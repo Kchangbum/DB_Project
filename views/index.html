@@ -80,7 +80,6 @@
       <!-- chart -->
       <canvas id = "myChart"></canvas>
       <script>
-        const xname = ['1월', '2월', '3월', '4월','5월','6월','7월','8월'];
         const ctx = document.getElementById('myChart').getContext('2d');
         const jsonString = '{{ data | safe }}'; // Assuming Nunjucks supports this syntax
         // Parse the JSON string
@@ -89,10 +88,10 @@
             new Chart(ctx, {
               type: 'line',
               data: {
-                labels: xname,
+                labels: serverData.map(item=>item.Model),
                 datasets: [{
                   label: 'Your Dataset Label',
-                  data: serverData.map(item => item.mile),
+                  data: serverData.map(item => item.emission_factor),
                   borderColor: 'rgba(75, 192, 192, 1)',
                   borderWidth: 1,
                   fill: false
