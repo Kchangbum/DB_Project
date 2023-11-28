@@ -39,7 +39,27 @@ const Gas_emission_yearSchema = new Schema({
 const Gas_emission_year = mongoose.model('Gas_emission_year', Gas_emission_yearSchema, 'Greenhouse_Gas_Emissions_by_Year');
 
 
+app.post('/insert', async (req, res) => {
+  // request 안에 있는 내용을 처리
+  // request.body
+  const name = req.body.Name;
+  const co2 = req.body.co2;
 
+  console.log(name);
+  console.log(co2);  
+  // mongodb에 저장
+  const inserting = emission_factor({
+    Model : name,
+    tonCO2eq : co2
+  })
+  const result = await inserting.save().then(() => { // 객체에 생성된 data 저장
+      console.log('Success')
+      res.redirect('/');
+      //res.render('detail', {title: title, contents: contents });
+  }) .catch((err) => {
+    console.error(err)
+  })
+});
 
 
 
@@ -91,12 +111,10 @@ app.get('/detail/:model', async (req,res) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
   }
-
 })
 
 app.post('/delete/:id', async (req,res) => {
   const id = req.params.id;
-
   const deleteValue = emission_factor.deleteOne({_id:id}).then(() => {
     console.log('delete Success : ', deleteValue);
     res.redirect('/')

@@ -51,9 +51,6 @@
       </svg>
       Tech rookie
     </a>
-    
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
     </button>
 
 
@@ -128,13 +125,43 @@
             });
           </script>
         
-          <form id= "myForm" action = "/" method="post">
-            <label for = "title"></label>
-            <input type = "text" name ="model" id = title>
+          <form id = "insert" action="/insert" method="post">
+            <input type="text" name="Name" >
+            <input type="text" name="co2" >
             <input type="submit" value="submit">
           </form>
           <script>
-            document.getElementById("myForm").addEventListener("sumbit", function(event) {
+            document.getElementById("insert").addEventListener("submit", function(event) {
+              const Name = document.getElementById("Name").value;
+              const co2 = document.getElementById("co2").value;
+            
+            fetch('/insert', {
+              method : 'POST',
+              hearders: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                name : Name,
+                co2 : co2
+              })
+            })
+            .then(Response => Response.json)
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => {
+              console.error('Error: ', error);
+            });
+          });
+          </script>
+
+          <form id= "myForm" action = "/" method="post">
+            <label for = "title"></label>
+            <input type = "text" name ="model" id = "title">
+            <input type="submit" value="submit">
+          </form>
+          <script>
+            document.getElementById("myForm").addEventListener("submit", function(event) {
               const modelInput = document.getElementById("model");
               const modelValue = modelInput.value;
             
